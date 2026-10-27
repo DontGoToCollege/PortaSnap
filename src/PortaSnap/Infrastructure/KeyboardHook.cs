@@ -58,11 +58,11 @@ public sealed class KeyboardHook : IDisposable
             int vk = (int)info.vkCode;
             bool down = msg is Native.WM_KEYDOWN or Native.WM_SYSKEYDOWN;
             bool up = msg is Native.WM_KEYUP or Native.WM_SYSKEYUP;
-            bool injected = (info.flags & Native.LLKHF_INJECTED) != 0;
-
             if (up && _swallowUp.Remove(vk)) return new IntPtr(1);
 
-            if (down && !injected && !IsModifier(vk))
+            // Injected keys count too, so AutoHotkey's SendInput, macro pads, Stream Decks etc. can trigger captures.
+            // PortaSnap itself only injects Alt (ForceForeground), which IsModifier already skips.
+            if (down && !IsModifier(vk))
             {
                 bool ctrl = Native.IsKeyDown(Native.VK_CONTROL);
                 bool alt = Native.IsKeyDown(Native.VK_MENU);

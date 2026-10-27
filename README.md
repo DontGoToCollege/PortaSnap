@@ -60,6 +60,9 @@ If the exe sits somewhere read-only, data falls back to `%LocalAppData%\PortaSna
 | Scrolling capture | Ctrl + Shift + Print Screen |
 | Start / stop recording | Shift + Print Screen |
 
+Other programs can press these keys for you too: an AutoHotkey script with `SendInput {PrintScreen}`, a macro
+keypad or a Stream Deck all trigger the same captures.
+
 Editor: V select, A arrow, L line, R shape, T text, O callout, S step, H highlight, B blur, P pen,
 K marker, M magnify, G spotlight, C crop, X slice (Alt = other direction) · Ctrl+Z/Y undo/redo · Ctrl+S save · Ctrl+E export ·
 Ctrl+D duplicate · Delete (the selected object, or the open capture when nothing is selected) · arrows nudge the selection (Shift = 10 px) or, with nothing selected, step

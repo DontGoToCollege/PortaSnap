@@ -14,7 +14,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-    <Version>0.5.1</Version>
+    <Version>0.5.2</Version>
     <Authors>PortaSnap</Authors>
     <Product>PortaSnap</Product>
     <Description>Portable, offline screen capture, recorder and image editor</Description>

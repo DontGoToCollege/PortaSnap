@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.2 — 2026-10-27
+
+- Hotkeys now also work when the key press comes from another program instead of the keyboard: AutoHotkey's
+  `SendInput {PrintScreen}`, macro keypads, Stream Deck and similar tools. Before, PortaSnap ignored these
+  "synthetic" key presses, while Greenshot and Snagit accepted them.
+
 ## 0.5.1 — 2026-10-18
 
 - Fixed "Create file association with .psnap": on PCs where Explorer runs with admin rights (e.g. UAC turned
