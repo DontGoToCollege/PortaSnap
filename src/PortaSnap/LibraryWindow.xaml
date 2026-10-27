@@ -1,0 +1,116 @@
+<Window x:Class="PortaSnap.LibraryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PortaSnap Library" Width="1140" Height="760" MinWidth="640" MinHeight="420"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}"
+        FontFamily="Segoe UI" FontSize="12.5" UseLayoutRounding="True"
+        Icon="pack://application:,,,/Assets/PortaSnap.ico">
+    <Window.Resources>
+        <Style x:Key="TileItem" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Bd" BorderThickness="2" BorderBrush="Transparent" CornerRadius="10">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1" Padding="10,8">
+            <DockPanel LastChildFill="False">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <Border Background="{DynamicResource SegmentBackBrush}" CornerRadius="8" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="FilterAll" Style="{StaticResource SegmentRadio}" GroupName="Filter" IsChecked="True" Content="All" Checked="Filter_Changed" MinWidth="60"/>
+                            <RadioButton x:Name="FilterImages" Style="{StaticResource SegmentRadio}" GroupName="Filter" Content="Images" Checked="Filter_Changed" MinWidth="60"/>
+                            <RadioButton x:Name="FilterVideos" Style="{StaticResource SegmentRadio}" GroupName="Filter" Content="Videos" Checked="Filter_Changed" MinWidth="60"/>
+                        </StackPanel>
+                    </Border>
+                    <Grid Margin="12,0,0,0" Width="260" VerticalAlignment="Center">
+                        <TextBox x:Name="SearchBox" Padding="26,5,6,5" TextChanged="Search_Changed" VerticalContentAlignment="Center"/>
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE721;" FontSize="12" HorizontalAlignment="Left" Margin="9,0,0,0"
+                                   Foreground="{DynamicResource SubtleTextBrush}" IsHitTestVisible="False"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <Button Style="{StaticResource SecondaryButton}" Click="ImportFolder_Click" Margin="0,0,6,0"
+                            ToolTip="Import every .snagx file in a folder (your Snagit library is usually Documents\Snagit)">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE8B5;" FontSize="13" Margin="0,0,6,0"/><TextBlock Text="Import Snagit library…"/></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource SecondaryButton}" Click="ImportFiles_Click" Margin="0,0,6,0" ToolTip="Pick individual .snagx files">
+                        <TextBlock Text="Import .snagx files…"/>
+                    </Button>
+                    <Button Style="{StaticResource FlatButton}" Click="OpenFolder_Click" ToolTip="Open the library folder">
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE838;"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0" Padding="10,4">
+            <TextBlock x:Name="StatusText" Foreground="{DynamicResource SubtleTextBrush}" TextTrimming="CharacterEllipsis"/>
+        </Border>
+
+        <Grid>
+            <ListBox x:Name="Items" SelectionMode="Extended" BorderThickness="0" Background="Transparent" Padding="8"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource TileItem}"
+                     MouseDoubleClick="Items_DoubleClick" KeyDown="Items_KeyDown"
+                     PreviewMouseLeftButtonDown="Items_PreviewMouseDown" PreviewMouseMove="Items_PreviewMouseMove">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="204" Background="{DynamicResource PanelBrush}" CornerRadius="8" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="6" ToolTip="{Binding FileName}">
+                            <StackPanel>
+                                <Grid Height="126">
+                                    <Border Background="{DynamicResource InsetBrush}" CornerRadius="5"/>
+                                    <Image Source="{Binding Thumbnail}" Stretch="Uniform" Margin="4"/>
+                                    <Border Visibility="{Binding VideoBadge}" Background="#CC111827" CornerRadius="4" HorizontalAlignment="Left"
+                                            VerticalAlignment="Bottom" Margin="8" Padding="6,2">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#xE768;" FontFamily="{StaticResource IconFont}" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Video" Foreground="White" FontSize="10" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Margin="2,6,2,0"/>
+                                <TextBlock Text="{Binding DateText}" Foreground="{DynamicResource SubtleTextBrush}" FontSize="11" Margin="2,1,2,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Open" Click="Open_Click" FontWeight="SemiBold"/>
+                        <MenuItem Header="Copy image" Click="Copy_Click"/>
+                        <MenuItem Header="Export…" Click="Export_Click"/>
+                        <MenuItem Header="Open file location" Click="Reveal_Click"/>
+                        <MenuItem Header="Copy file path" Click="CopyPath_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Delete (to Recycle Bin)" Click="Delete_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Properties" Click="Properties_Click"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" IsHitTestVisible="False">
+                <TextBlock Text="Nothing here yet" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{DynamicResource EmptyTextBrush}"/>
+                <TextBlock Text="Captures and recordings appear here. You can also import your Snagit library." Foreground="{DynamicResource SubtleTextBrush}" Margin="0,6,0,0"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
