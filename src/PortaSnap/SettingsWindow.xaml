@@ -1,0 +1,122 @@
+<Window x:Class="PortaSnap.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PortaSnap Settings" Width="520" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}"
+        FontFamily="Segoe UI" FontSize="13" UseLayoutRounding="True"
+        Icon="pack://application:,,,/Assets/PortaSnap.ico">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Margin="18,14,18,16">
+        <TextBlock Text="Settings" FontSize="18" FontWeight="SemiBold"/>
+
+        <TextBlock Text="GLOBAL HOTKEYS" Style="{StaticResource SectionHeader}"/>
+        <Border Background="{DynamicResource PanelBrush}" CornerRadius="8" Padding="14,8" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+            <StackPanel>
+                <CheckBox x:Name="HotkeysEnabled" Content="Enable global hotkeys" Margin="0,4,0,8" Click="HotkeysEnabled_Click"/>
+                <Grid x:Name="HotkeyGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Region / window" VerticalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="1" x:Name="CaptureKey" Style="{StaticResource SecondaryButton}" Margin="0,3" Click="Record_Click" Tag="Capture"/>
+                    <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource FlatButton}" Content="Clear" Click="Clear_Click" Tag="Capture"/>
+                    <TextBlock Grid.Row="1" Text="Full screen" VerticalAlignment="Center"/>
+                    <Button Grid.Row="1" Grid.Column="1" x:Name="FullScreenKey" Style="{StaticResource SecondaryButton}" Margin="0,3" Click="Record_Click" Tag="FullScreen"/>
+                    <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource FlatButton}" Content="Clear" Click="Clear_Click" Tag="FullScreen"/>
+                    <TextBlock Grid.Row="2" Text="Scrolling capture" VerticalAlignment="Center"/>
+                    <Button Grid.Row="2" Grid.Column="1" x:Name="ScrollingKey" Style="{StaticResource SecondaryButton}" Margin="0,3" Click="Record_Click" Tag="Scrolling"/>
+                    <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource FlatButton}" Content="Clear" Click="Clear_Click" Tag="Scrolling"/>
+                    <TextBlock Grid.Row="3" Text="Start / stop recording" VerticalAlignment="Center"/>
+                    <Button Grid.Row="3" Grid.Column="1" x:Name="VideoKey" Style="{StaticResource SecondaryButton}" Margin="0,3" Click="Record_Click" Tag="Video"/>
+                    <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource FlatButton}" Content="Clear" Click="Clear_Click" Tag="Video"/>
+                </Grid>
+                <TextBlock Text="Click a hotkey, then press the new key combination (Esc cancels). PortaSnap takes Print Screen before Windows' Snipping Tool does."
+                           TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,6,0,2"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Text="GENERAL" Style="{StaticResource SectionHeader}"/>
+        <Border Background="{DynamicResource PanelBrush}" CornerRadius="8" Padding="14,8" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+            <StackPanel>
+                <DockPanel Margin="0,4,0,8">
+                    <TextBlock Text="Appearance" VerticalAlignment="Center" Width="160"/>
+                    <ComboBox x:Name="ThemeCombo" SelectionChanged="Theme_Changed">
+                        <ComboBoxItem Content="Match Windows"/>
+                        <ComboBoxItem Content="Light"/>
+                        <ComboBoxItem Content="Dark"/>
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel Margin="0,0,0,8">
+                    <TextBlock Text="Magnifier zoom" VerticalAlignment="Center" Width="160"
+                               ToolTip="How close the pixel magnifier zooms while you select an area. Its size on screen stays the same."/>
+                    <ComboBox x:Name="MagnifierCombo" SelectionChanged="Magnifier_Changed">
+                        <ComboBoxItem Content="9× — very close (15 pixels across)" Tag="15"/>
+                        <ComboBoxItem Content="6× — close (23 pixels across)" Tag="23"/>
+                        <ComboBoxItem Content="4× — medium (33 pixels across)" Tag="33"/>
+                        <ComboBoxItem Content="3× — wide (45 pixels across)" Tag="45"/>
+                        <ComboBoxItem Content="2× — widest (67 pixels across)" Tag="67"/>
+                    </ComboBox>
+                </DockPanel>
+                <CheckBox x:Name="ShowCaptureHints" Content="Show help text at the top of the screen while capturing" Margin="0,4" Click="General_Changed"
+                          ToolTip="The &quot;Drag to select an area · Click to capture the highlighted window · …&quot; banner shown when you press Print Screen"/>
+                <CheckBox x:Name="ConfirmDelete" Content="Ask before deleting a capture (Delete key, right-click › Delete)" Margin="0,4" Click="General_Changed"/>
+                <CheckBox x:Name="StartWithWindows" Content="Start PortaSnap when I sign in to Windows (opens quietly in the tray)" Margin="0,4" Click="General_Changed"/>
+                <CheckBox x:Name="StartInTray" Content="Also start in the tray when I open it myself" Margin="0,4" Click="General_Changed"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Text="SAVING CAPTURES" Style="{StaticResource SectionHeader}"/>
+        <Border Background="{DynamicResource PanelBrush}" CornerRadius="8" Padding="14,10" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+            <StackPanel>
+                <DockPanel Margin="0,0,0,8">
+                    <TextBlock Text="Save captures as" VerticalAlignment="Center" Width="160"/>
+                    <ComboBox x:Name="FormatCombo" SelectionChanged="Format_Changed">
+                        <ComboBoxItem Content="JPG (.jpg)" Tag="jpg"/>
+                        <ComboBoxItem Content="JPEG (.jpeg)" Tag="jpeg"/>
+                        <ComboBoxItem Content="PNG (.png) — lossless, larger files" Tag="png"/>
+                        <ComboBoxItem Content="BMP (.bmp)" Tag="bmp"/>
+                        <ComboBoxItem Content="GIF (.gif)" Tag="gif"/>
+                        <ComboBoxItem Content="TIFF (.tif)" Tag="tif"/>
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel x:Name="JpegRow" Margin="0,0,0,6">
+                    <TextBlock Text="JPEG quality" VerticalAlignment="Center" Width="160"/>
+                    <TextBlock x:Name="JpegValue" DockPanel.Dock="Right" Width="44" TextAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource SubtleTextBrush}"/>
+                    <Slider x:Name="JpegQuality" Minimum="10" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="Jpeg_Changed"/>
+                </DockPanel>
+                <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,2,0,10"
+                           Text="Each capture is a normal image file in the library. Editing works on its project (.psnap, kept in a hidden .projects folder) and saving rewrites the image. New captures use this format; existing images keep theirs. JPEG quality also applies to JPG exports."/>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" x:Name="RemoveAssociation" Style="{StaticResource FlatButton}" Content="Remove" Click="RemoveAssociation_Click"
+                            ToolTip="Stop opening .psnap files with PortaSnap"/>
+                    <Button x:Name="CreateAssociation" Style="{StaticResource SecondaryButton}" Content="Create file association with .psnap" Click="CreateAssociation_Click"
+                            HorizontalAlignment="Left" ToolTip="Double-clicking a .psnap project in Explorer opens it in PortaSnap (for your Windows user only)"/>
+                </DockPanel>
+                <TextBlock x:Name="AssociationText" FontSize="11" Foreground="{DynamicResource SubtleTextBrush}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Text="PORTABLE STORAGE" Style="{StaticResource SectionHeader}"/>
+        <Border Background="{DynamicResource PanelBrush}" CornerRadius="8" Padding="14,10" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1">
+            <StackPanel>
+                <TextBlock x:Name="StorageText" TextWrapping="Wrap"/>
+                <TextBlock x:Name="DataPath" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12" Margin="0,6,0,8" Foreground="{DynamicResource SubtleTextBrush}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource SecondaryButton}" Content="Open data folder" Click="OpenData_Click" Margin="0,0,8,0"/>
+                    <Button Style="{StaticResource SecondaryButton}" Content="Open log" Click="OpenLog_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <DockPanel Margin="0,16,0,0">
+            <TextBlock x:Name="VersionText" Foreground="{DynamicResource SubtleTextBrush}" VerticalAlignment="Center" FontSize="11"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Content="Done" MinWidth="90" HorizontalAlignment="Right" Click="Done_Click" IsDefault="True"/>
+        </DockPanel>
+    </StackPanel>
+    </ScrollViewer>
+</Window>
