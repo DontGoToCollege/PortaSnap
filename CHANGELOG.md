@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.3 — 2026-11-07
+
+- Fixed the editor's Recent tray stopping after 300 captures: it now shows the whole library, the same as the
+  Library window (All). The arrow keys also page through every capture.
+
 ## 0.5.2 — 2026-10-27
 
 - Hotkeys now also work when the key press comes from another program instead of the keyboard: AutoHotkey's

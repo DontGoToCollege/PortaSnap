@@ -1308,7 +1308,7 @@ public partial class EditorWindow : Window
     {
         var all = _app.Library.Scan(); // newest capture first
         if (!_app.Settings.RecentNewestFirst) all.Reverse();
-        _recent = all.Take(300).ToList();
+        _recent = all; // whole library: the tray virtualizes and thumbnails load in the background
         SortText.Text = _app.Settings.RecentNewestFirst ? "Newest" : "Oldest";
         SortButton.ToolTip = _app.Settings.RecentNewestFirst
             ? "Showing newest captures first — click to show oldest first"
